@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Recon Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #f4f7f9;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+            /* Darker border for definition */
+            --text-main: #000000;
+            /* Solid black for primary text */
+            --text-bold: #0f172a;
+            /* Deep navy for headings */
+            --text-muted: #334155;
+            /* Dark slate for secondary text */
+            --accent: #000000;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding-bottom: 50px;
+        }
+
+        /* Header & Search */
+        .header-section {
+            background-color: var(--bg-card);
+            padding: 40px 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            display: flex;
+            background: #fff;
+            border: 2px solid var(--accent);
+            /* Dark search border */
+            border-radius: 4px;
+            max-width: 700px;
+            margin: 0 auto 25px auto;
+            overflow: hidden;
+        }
+
+        .search-container input {
+            border: none;
+            padding: 14px 20px;
+            flex-grow: 1;
+            outline: none;
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Toggle Buttons */
+        .view-toggle-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-toggle {
+            background-color: #fff;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 12px 28px;
+            font-weight: 800;
+            /* Extra bold for professionalism */
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-toggle.active {
+            background-color: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+        /* Accordion Styling */
+        .content-view {
+            display: none;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .content-view.active {
+            display: block;
+        }
+
+        .accordion-item {
+            background-color: var(--bg-card) !important;
+            border: 1px solid var(--border-color) !important;
+            margin-bottom: 15px;
+            border-radius: 4px !important;
+        }
+
+        .accordion-button {
+            background-color: var(--bg-card) !important;
+            color: var(--text-main) !important;
+            /* Bold Black Text */
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 22px;
+            box-shadow: none !important;
+        }
+
+        .accordion-button:not(.collapsed) {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .accordion-body {
+            padding: 30px;
+            background-color: #ffffff;
+        }
+
+        /* Data Display - High Contrast */
+        .meta-label {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .meta-value {
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+        }
+
+        .severity-badge {
+            float: right;
+            border: 2px solid var(--text-main);
+            padding: 2px 12px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .tag {
+            display: inline-block;
+            background: #fff;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 8px;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-section text-center">
+        <div class="container">
+            <h4 class="mb-4 fw-black" style="color: #000;">NETWORK_RECON_REPORT</h4>
+            <div class="search-container">
+                <input type="text" value="google.com" readonly>
+            </div>
+
+            <div class="view-toggle-group">
+                <button class="btn-toggle active" onclick="showView('infra', this)">Infrastructure</button>
+                <button class="btn-toggle" onclick="showView('vuln', this)">Vulnerabilities</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div id="view-infra" class="content-view active">
+            <div class="accordion" id="accInfra">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#host">Target Resolution</button>
+                    </h2>
+                    <div id="host" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="meta-label">Primary Endpoint</div>
+                                    <div class="meta-value">google.com</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="meta-label">Resolved IP</div>
+                                    <div class="meta-value">142.250.190.46</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#stack">Environment Details</button>
+                    </h2>
+                    <div id="stack" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <div class="meta-label">Software Signature</div>
+                            <div class="meta-value">Apache/2.4.49 (Ubuntu)</div>
+                            <div class="meta-label">Detected Frameworks</div>
+                            <div class="mt-2">
+                                <span class="tag">PHP 8.2</span>
+                                <span class="tag">jQuery 3.6</span>
+                                <span class="tag">Bootstrap 5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-vuln" class="content-view">
+            <div class="accordion" id="accVuln">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sqli">
+                            SQL Injection Finding
+                            <span class="severity-badge">High Severity</span>
+                        </button>
+                    </h2>
+                    <div id="sqli" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <p class="fw-bold">Dynamic parameter 'id' is susceptible to blind SQL injection.</p>
+                            <div class="meta-label">Remediation Action</div>
+                            <p class="fw-medium">Replace dynamic queries with prepared statements using PDO or
+                                equivalent secure interfaces.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#headers">
+                            Missing Security Headers
+                            <span class="severity-badge">Medium Severity</span>
+                        </button>
+                    </h2>
+                    <div id="headers" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <p class="fw-bold">Security headers (CSP, X-Frame-Options) were not detected in the
+                                response.</p>
+                            <p>This allows for potential UI redressing and Cross-Site Scripting (XSS) vectors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showView(viewId, btn) {
+            document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
