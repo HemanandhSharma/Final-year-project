@@ -32,6 +32,7 @@ def run_nmap(host):
     extract_ports(output)
     extract_traceroute(output)
 
+# Usind Regex for Extracting data from NMAP Scan
 # Extract IP Address
 def extract_ip(output):
     print("\n[+] Target IP Address:")
@@ -77,4 +78,5 @@ if is_host_alive(target):
     print(f"[+] {target} is alive. Starting scan.\n")
     run_nmap(target)
 else:
+
     print(f"[-] {target} is not reachable. Scan skipped.")
